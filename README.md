@@ -20,6 +20,6 @@ To start the client, run the command
 
 ### Note
 
-Before running the files, change the host_ip to your local ip address of the server. 
+Change the `HOST_IP` in the `params.txt` to the local ip address of the system on which you are running `server.py`. 
 
 The program works only over LAN.
