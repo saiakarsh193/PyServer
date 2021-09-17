@@ -16,6 +16,21 @@ server.listen(5)
 print('server running on ' + HOST_IP + ':' + str(PORT))
 print('waiting for clients...')
 
+def serveClient(client, address, userinit):
+    [username, userpass] = userinit.split('<SEP>')
+    print(username, userpass)
+    isauth = isUserAuthorized(usercreds, username, userpass)
+    client.send(str.encode("SUCCESS" if isauth else "FAIL"))
+    if(isauth):
+        print('client connected ' + address[0] + ':' + str(address[1]))
+        while True:
+            command = client.recv(BUFFER_SIZE).decode('utf-8')
+            print(command)
+            if(command == "exit"):
+                break
+        print('client disconnected ' + address[0] + ':' + str(address[1]))
+    client.close()
+
 while True:
     (client, address) = server.accept()
     userinit = client.recv(BUFFER_SIZE).decode('utf-8')
@@ -24,16 +39,6 @@ while True:
         print('killing server')
         break
     else:
-        [username, userpass] = userinit.split('<SEP>')
-        print(username, userpass)
-        isauth = isUserAuthorized(usercreds, username, userpass)
-        client.send(str.encode("SUCCESS" if isauth else "FAIL"))
-        if(isauth):
-            print('client connected ' + address[0] + ':' + str(address[1]))
-            while True:
-                command = client.recv(BUFFER_SIZE).decode('utf-8')
-                print(command)
-                if(command == "exit"):
-                    break
-            print('client disconnected ' + address[0] + ':' + str(address[1]))
-        client.close()
+        client_thread = threading.Thread(target = serveClient, args = (client, address, userinit, ))
+        client_thread.start()
+
