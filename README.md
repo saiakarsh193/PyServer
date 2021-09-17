@@ -1,1 +1,1 @@
-Test phase
+Server hosted terminal built on python
