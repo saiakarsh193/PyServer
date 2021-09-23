@@ -1,6 +1,6 @@
 # PyServer-Shell
 
-## Made by Sai Akarsh (17-09-21)
+## Sai Akarsh (17-09-21)
 
 ### Description
 
