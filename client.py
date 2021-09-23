@@ -3,10 +3,13 @@ import sys
 
 from parseparams import parseParams
 
-[HOST_IP, PORT, BUFFER_SIZE] = parseParams()
+[HOST_IP, PORT, BUFFER_SIZE] = parseParams('params.txt')
 
 if(len(sys.argv) == 2):
-    userinit = sys.argv[1]
+    if(sys.argv[1].lower() == "kill"):
+        userinit = sys.argv[1]
+    else:
+        userinit = sys.argv[1] + "<SEP>" + "0"
 elif(len(sys.argv) == 3):
     userinit = sys.argv[1] + "<SEP>" + sys.argv[2]
 else:
@@ -25,13 +28,21 @@ try:
         print('sending kill server command')
     else:
         isauth = server.recv(BUFFER_SIZE).decode('utf-8')
-        print("AUTH:", isauth)
-        if(isauth):
+        if(isauth == "SUCCESS"):
+            print("pyserver_shell running...")
             while True:
-                command = input().lower()
+                command = input(">> ").lower()
+                if(len(command) == 0):
+                    continue
                 server.send(str.encode(command))
                 if(command == "exit"):
                     break
+                else:
+                    response = server.recv(BUFFER_SIZE).decode('utf-8')
+                    print(response)
+            print("pyserver_shell stopped")
+        else:
+            print("Invalid user details")
         server.close()
     print('connection closed')
 except socket.error as e:

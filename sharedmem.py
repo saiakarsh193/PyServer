@@ -15,13 +15,13 @@ class sharedMem:
         if(isinstance(self.val, list)):
             return len(self.val)
         else:
-            return -1
+            return None
 
     def __getitem__(self, key):
         if(isinstance(self.val, list)):
             return self.val[key]
         else:
-            return -1
+            return None
     
     def __str__(self):
         return str(self.val)
