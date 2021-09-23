@@ -6,7 +6,7 @@ from sharedmem import sharedMem
 from jsontools import loadJSON
 from userauth import isUserAuthorized
 
-[HOST_IP, PORT, BUFFER_SIZE] = parseParams()
+[HOST_IP, PORT, BUFFER_SIZE] = parseParams('params.txt')
 
 usercreds = sharedMem(loadJSON('user_credentials.json'))
 
@@ -18,14 +18,13 @@ print('waiting for clients...')
 
 def serveClient(client, address, userinit):
     [username, userpass] = userinit.split('<SEP>')
-    print(username, userpass)
-    isauth = isUserAuthorized(usercreds, username, userpass)
-    client.send(str.encode("SUCCESS" if isauth else "FAIL"))
-    if(isauth):
+    isauth = "SUCCESS" if isUserAuthorized(usercreds, username, userpass) else "FAIL"
+    client.send(str.encode(isauth))
+    if(isauth == "SUCCESS"):
         print('client connected ' + address[0] + ':' + str(address[1]))
         while True:
             command = client.recv(BUFFER_SIZE).decode('utf-8')
-            print(command)
+            print(username, ">>", command)
             if(command == "exit"):
                 break
         print('client disconnected ' + address[0] + ':' + str(address[1]))

@@ -1,5 +1,9 @@
 import os
 
+DEF_HOST_IP = '192.168.29.145'
+DEF_PORT = 2004
+DEF_BUFFER_SIZE = 4096
+
 def isIP(ip):
     ind = ip.split('.')
     if not len(ind) == 4:
@@ -9,8 +13,8 @@ def isIP(ip):
             return False
     return True
 
-def parseParams(path='params.txt'):
-    params = {'HOST_IP': '192.168.29.145', 'PORT': 2004, 'BUFFER_SIZE': 4096}
+def parseParams(path):
+    params = {'HOST_IP': DEF_HOST_IP, 'PORT': DEF_PORT, 'BUFFER_SIZE': DEF_BUFFER_SIZE}
     if(os.path.isfile(path)):
         with open(path, 'r') as f:
             lines = f.read().split('\n')
