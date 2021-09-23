@@ -29,9 +29,14 @@ try:
             print("pyserver_shell running...")
             while True:
                 command = input(">> ").lower()
+                if(len(command) == 0):
+                    continue
                 server.send(str.encode(command))
                 if(command == "exit"):
                     break
+                else:
+                    response = server.recv(BUFFER_SIZE).decode('utf-8')
+                    print(response)
             print("pyserver_shell stopped")
         else:
             print("Invalid user details")
