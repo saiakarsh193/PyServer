@@ -5,8 +5,11 @@ from parseparams import parseParams
 
 [HOST_IP, PORT, BUFFER_SIZE] = parseParams('params.txt')
 
-if(len(sys.argv) == 2 and sys.argv[1].lower() == "kill"):
-    userinit = sys.argv[1]
+if(len(sys.argv) == 2):
+    if(sys.argv[1].lower() == "kill"):
+        userinit = sys.argv[1]
+    else:
+        userinit = sys.argv[1] + "<SEP>" + "0"
 elif(len(sys.argv) == 3):
     userinit = sys.argv[1] + "<SEP>" + sys.argv[2]
 else:
