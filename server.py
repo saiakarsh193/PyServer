@@ -29,16 +29,11 @@ def serveClient(client, address, userinit):
             if(command == "exit"):
                 break
             else:
-                spl = command.find(' ')
-                if(spl >= 0):
-                    handle = command[:spl].strip()
-                    value = command[spl:].strip()
-                    if(handle in bots):
-                        client.send(str.encode(bots[handle](value)))
-                    else:
-                        client.send(str.encode("Invalid bot"))
+                [handle, value] = command.split('<SEP>')
+                if(handle in bots):
+                    client.send(str.encode(bots[handle](value)))
                 else:
-                    client.send(str.encode("Invalid command"))
+                    client.send(str.encode("Invalid bot"))
         print('client disconnected ' + address[0] + ':' + str(address[1]))
     client.close()
 

@@ -31,13 +31,21 @@ try:
         if(isauth == "SUCCESS"):
             print("pyserver_shell running...")
             while True:
-                command = input(">> ").lower()
+                command = input(">> ").lower().strip()
                 if(len(command) == 0):
                     continue
-                server.send(str.encode(command))
                 if(command == "exit"):
+                    server.send(str.encode(command))
                     break
                 else:
+                    spl = command.find(' ')
+                    if(spl >= 0):
+                        handle = command[:spl].strip()
+                        value = command[spl:].strip()
+                    else:
+                        handle = command
+                        value = ""
+                    server.send(str.encode(handle + "<SEP>" + value))
                     response = server.recv(BUFFER_SIZE).decode('utf-8')
                     print(response)
             print("pyserver_shell stopped")
