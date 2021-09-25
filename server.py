@@ -32,7 +32,16 @@ def serveClient(client, address, userinit):
                 break
             elif(handle == "list" or handle == "ls"):
                 liststr = '\n'.join(os.listdir("root"))
+                if(len(liststr) == 0):
+                    liststr = "No files"
                 client.send(str.encode(liststr[:BUFFER_SIZE]))
+            elif(handle == "remove" or handle == "rm"):
+                value = os.path.basename(value)
+                if(os.path.isfile("root/" + value)):
+                    os.remove("root/" + value)
+                    client.send(str.encode(value + " removed"))
+                else:
+                    client.send(str.encode("Invalid file"))
             elif(handle == "upload" or handle == "upf"):
                 if(not os.path.isdir("root")):
                     os.mkdir("root")
