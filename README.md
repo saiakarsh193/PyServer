@@ -1,25 +1,24 @@
-# PyServer-Shell
+# PyServer-Shell  
+## Sai Akarsh (17-09-21)  
 
-## Sai Akarsh (17-09-21)
+### Description  
+Simple remote terminal hosted on a socket based server.  
+The shell allows a few basic commands to communicate with the server.  
 
-### Description
+### Commands  
+- `exit` to exit the server
+- `list` to list the files in the server
+- `remove` to remove a file from the server
+- `upload` to upload a file to the server
 
-Server hosted terminal built on python
+### Running the Server  
+To start the server, run the command  
+`python server.py`  
 
-### Running the Server
+### Running the Client  
+To start the client, run the command  
+`python client.py <username> <password>`  
 
-To start the server, run the command
-
-`python server.py`
-
-### Running the Client
-
-To start the client, run the command
-
-`python client.py <username> <password>`
-
-### Note
-
-Change the `HOST_IP` in the `params.txt` to the local ip address of the system on which you are running `server.py`. 
-
-The program works only over LAN.
+### Note  
+Change the `HOST_IP` in the `params.txt` to the local ip address of the system on which you are running `server.py`.  
+The program works only over LAN.  

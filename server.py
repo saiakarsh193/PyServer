@@ -52,7 +52,7 @@ def serveClient(client, address, userinit):
                         data = client.recv(BUFFER_SIZE).decode('utf-8')
                         if(data != "<NULL>"):
                             f.write(data)
-                client.send(str.encode("File uploaded"))
+                client.send(str.encode(value + " uploaded"))
             else:
                 if(handle in bots):
                     client.send(str.encode(bots[handle](value)))
