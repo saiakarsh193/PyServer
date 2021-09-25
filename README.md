@@ -24,11 +24,15 @@ To start the client, run the command
 - Change the `HOST_IP` in the `params.txt` to the local ip address of the system on which you are running `server.py`.  
 - The program works only over LAN.  
 - To use client program without the support files, you can hardcode the parameters directly in `client.py`. This will allow you to directly run this file without the need of other files.  
+
+  Modify (in `client.py`)  
+
   ```python
   from parseparams import parseParams
   [HOST_IP, PORT, BUFFER_SIZE] = parseParams('params.txt')
   ```
-  to  
+  to
+  
   ```python
   [HOST_IP, PORT, BUFFER_SIZE] = [<HOST_IP>, <PORT>, <BUFFER_SIZE>]
   ```
