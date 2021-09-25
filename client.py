@@ -1,5 +1,7 @@
 import socket
 import sys
+import os
+import math
 
 from parseparams import parseParams
 
@@ -34,20 +36,35 @@ try:
                 command = input(">> ").lower().strip()
                 if(len(command) == 0):
                     continue
-                if(command == "exit"):
-                    server.send(str.encode(command))
-                    break
+                spl = command.find(' ')
+                if(spl >= 0):
+                    handle = command[:spl].strip()
+                    value = command[spl:].strip()
                 else:
-                    spl = command.find(' ')
-                    if(spl >= 0):
-                        handle = command[:spl].strip()
-                        value = command[spl:].strip()
+                    handle = command
+                    value = ""
+                if(handle == "upload"):
+                    if(os.path.isfile(value)):
+                        fvalue = value
+                        value = os.path.basename(fvalue)
                     else:
-                        handle = command
-                        value = ""
-                    server.send(str.encode(handle + "<SEP>" + value))
-                    response = server.recv(BUFFER_SIZE).decode('utf-8')
-                    print(response)
+                        print("Invalid file")
+                        continue
+                server.send(str.encode(handle + "<SEP>" + value))
+                if(handle == "exit"):
+                    break
+                elif(handle == "upload"):
+                    filesize = os.path.getsize(fvalue)
+                    segs = math.ceil(filesize / BUFFER_SIZE)
+                    server.send(str.encode(str(segs)))
+                    with open(fvalue, 'r') as f:
+                        for _ in range(segs):
+                            data = f.read(BUFFER_SIZE)
+                            if(data == ""):
+                                data = "<NULL>"
+                            server.send(str.encode(data))
+                response = server.recv(BUFFER_SIZE).decode('utf-8')
+                print(response)
             print("pyserver_shell stopped")
         else:
             print("Invalid user details")

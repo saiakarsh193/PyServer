@@ -1,5 +1,6 @@
 import socket
 import threading
+import os
 
 from parseparams import parseParams
 from sharedmem import sharedMem
@@ -26,10 +27,21 @@ def serveClient(client, address, userinit):
         print('client connected ' + address[0] + ':' + str(address[1]))
         while True:
             command = client.recv(BUFFER_SIZE).decode('utf-8')
-            if(command == "exit"):
+            [handle, value] = command.split('<SEP>')
+            if(handle == "exit"):
                 break
+            elif(handle == "upload"):
+                if(not os.path.isdir("root")):
+                    os.mkdir("root")
+                segs = client.recv(BUFFER_SIZE).decode('utf-8')
+                segs = int(segs)
+                with open("root/" + value, 'w') as f:
+                    for _ in range(segs):
+                        data = client.recv(BUFFER_SIZE).decode('utf-8')
+                        if(data != "<NULL>"):
+                            f.write(data)
+                client.send(str.encode("File uploaded"))
             else:
-                [handle, value] = command.split('<SEP>')
                 if(handle in bots):
                     client.send(str.encode(bots[handle](value)))
                 else:
@@ -47,4 +59,3 @@ while True:
     else:
         client_thread = threading.Thread(target = serveClient, args = (client, address, userinit, ))
         client_thread.start()
-
