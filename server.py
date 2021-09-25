@@ -30,7 +30,10 @@ def serveClient(client, address, userinit):
             [handle, value] = command.split('<SEP>')
             if(handle == "exit"):
                 break
-            elif(handle == "upload"):
+            elif(handle == "list" or handle == "ls"):
+                liststr = '\n'.join(os.listdir("root"))
+                client.send(str.encode(liststr[:BUFFER_SIZE]))
+            elif(handle == "upload" or handle == "upf"):
                 if(not os.path.isdir("root")):
                     os.mkdir("root")
                 segs = client.recv(BUFFER_SIZE).decode('utf-8')
