@@ -1,6 +1,7 @@
 import socket
 import threading
 import os
+import math
 
 from parseparams import parseParams
 from sharedmem import sharedMem
@@ -53,6 +54,25 @@ def serveClient(client, address, userinit):
                         if(data != "<NULL>"):
                             f.write(data)
                 client.send(str.encode(value + " uploaded"))
+            elif(handle == "download" or handle == "dnf"):
+                value = os.path.basename(value)
+                fvalue = "root/" + value
+                if(os.path.isfile(fvalue)):
+                    filesize = os.path.getsize(fvalue)
+                    segs = math.ceil(filesize / BUFFER_SIZE)
+                else:
+                    segs = -1
+                client.send(str.encode(str(segs)))
+                if(segs >= 0):
+                    with open(fvalue, 'r') as f:
+                        for _ in range(segs):
+                            data = f.read(BUFFER_SIZE)
+                            if(data == ""):
+                                data = "<NULL>"
+                            client.send(str.encode(data))
+                    client.send(str.encode(value + " downloaded"))
+                else:
+                    client.send(str.encode("Invalid file"))
             else:
                 if(handle in bots):
                     client.send(str.encode(bots[handle](value)))

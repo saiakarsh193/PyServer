@@ -43,7 +43,7 @@ try:
                 else:
                     handle = command
                     value = ""
-                if(handle == "upload"):
+                if(handle == "upload" or handle == "upf"):
                     if(os.path.isfile(value)):
                         fvalue = value
                         value = os.path.basename(fvalue)
@@ -53,7 +53,7 @@ try:
                 server.send(str.encode(handle + "<SEP>" + value))
                 if(handle == "exit"):
                     break
-                elif(handle == "upload"):
+                elif(handle == "upload" or handle == "upf"):
                     filesize = os.path.getsize(fvalue)
                     segs = math.ceil(filesize / BUFFER_SIZE)
                     server.send(str.encode(str(segs)))
@@ -63,6 +63,16 @@ try:
                             if(data == ""):
                                 data = "<NULL>"
                             server.send(str.encode(data))
+                elif(handle == "download" or handle == "dnf"):
+                    segs = server.recv(BUFFER_SIZE).decode('utf-8')
+                    segs = int(segs)
+                    if(segs >= 0):
+                        value = os.path.basename(value)
+                        with open(value, 'w') as f:
+                            for _ in range(segs):
+                                data = server.recv(BUFFER_SIZE).decode('utf-8')
+                                if(data != "<NULL>"):
+                                    f.write(data)
                 response = server.recv(BUFFER_SIZE).decode('utf-8')
                 print(response)
             print("pyserver_shell stopped")
