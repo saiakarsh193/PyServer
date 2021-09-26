@@ -57,6 +57,7 @@ try:
                     filesize = os.path.getsize(fvalue)
                     segs = math.ceil(filesize / BUFFER_SIZE)
                     server.send(str.encode(str(segs)))
+                    server.recv(BUFFER_SIZE).decode('utf-8')
                     with open(fvalue, 'r') as f:
                         for _ in range(segs):
                             data = f.read(BUFFER_SIZE)
@@ -66,6 +67,7 @@ try:
                 elif(handle == "download" or handle == "dnf"):
                     segs = server.recv(BUFFER_SIZE).decode('utf-8')
                     segs = int(segs)
+                    server.send(str.encode("ACK"))
                     if(segs >= 0):
                         value = os.path.basename(value)
                         with open(value, 'w') as f:

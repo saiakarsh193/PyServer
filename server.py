@@ -47,6 +47,7 @@ def serveClient(client, address, userinit):
                 if(not os.path.isdir("root")):
                     os.mkdir("root")
                 segs = client.recv(BUFFER_SIZE).decode('utf-8')
+                client.send(str.encode("ACK"))
                 segs = int(segs)
                 with open("root/" + value, 'w') as f:
                     for _ in range(segs):
@@ -63,6 +64,7 @@ def serveClient(client, address, userinit):
                 else:
                     segs = -1
                 client.send(str.encode(str(segs)))
+                client.recv(BUFFER_SIZE).decode('utf-8')
                 if(segs >= 0):
                     with open(fvalue, 'r') as f:
                         for _ in range(segs):
