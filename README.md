@@ -2,9 +2,9 @@
 ## Sai Akarsh (17-09-21)  
 
 ### Description  
-Simple remote terminal hosted on a socket based server.  
+Python based simple remote terminal hosted on a socket server.  
 The shell allows a few basic commands to communicate with the server.  
-Please read [the notes](#note) before running the program.  
+Please read the [notes](#note) before running the program.  
 
 ### Commands  
 - `upload` to upload a file to the server
